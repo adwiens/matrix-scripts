@@ -8,7 +8,7 @@
 #   - Element (web-based Matrix client)
 #   - Synapse-Admin (GUI Matrix administration)
 
-# Update source:     https://raw.githubusercontent.com/adwiens/matrix-scripts/main/.env
+# Update source:     https://raw.githubusercontent.com/adwiens/matrix-scripts/master/.env
 
 ################################################################################################################################
 # Version 0.0.2
@@ -43,7 +43,7 @@ fi
 
 # Check if new container tags are available
 time_echo "${YELLOW}Check if new container tags are available...${NC}"
-newEnvFile=$(curl -s -L https://raw.githubusercontent.com/adwiens/matrix-scripts/main/.env)
+newEnvFile=$(curl -s -L https://raw.githubusercontent.com/adwiens/matrix-scripts/master/.env)
 oldEnvFile=$(cat ".env")
 if [ "$oldEnvFile" = "$newEnvFile" ]; then
     time_echo "No updates found!"
