@@ -754,7 +754,7 @@ if [ -z "$installArgument" ]; then
     Show_Credentials
 
 
-eliallArgument = "autoinstall" ]; then
+elif [ $installArgument = "autoinstall" ]; then
     # Automatic installation with restore from backup
 
     # Read domain names
