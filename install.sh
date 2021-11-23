@@ -462,8 +462,9 @@ Optimize_PostgreSQL () {
             sed -i "s/max_parallel_maintenance_workers_value/$max_parallel_maintenance_workers/" docker-compose.yaml
         fi
         echo "${GREEN}Done${NC}"
-        echo
     fi
+    echo
+    echo
 }
 
 Modify_Docker_Compose_Configuration () {
@@ -554,7 +555,7 @@ Modify_Matrix_Registration_Configuration () {
     adminApiSec=$(pwgen -s 64 1)
     # sed -i "s/My_Admin_Api_Shared_Secret/$adminApiSec/" $registrationYaml
     yq -i e ".admin_api_shared_secret |= \"${adminApiSec}\"" $registrationYaml
-    echo "Done"
+    echo "${GREEN}Done${NC}"
     echo
 }
 
@@ -624,9 +625,15 @@ Check_Services_Are_Reachable () {
             echo "${RED}ERROR:   ${url[$i]}              is NOT reachable! Check configuration of this container:   ${containerName[$i]}${NC}"
             #exit 1
         else
-            echo "${GREEN}SERVICE REACHABLE: ${containerName[$i]}${NC}"
+            echo "${GREEN}SERVICE REACHABLE:   ${containerName[$i]}${NC}"
         fi
     done
+    echo
+    echo
+    docker ps
+    echo
+    echo
+    echo
 }
 
 Add_Crontab () {
