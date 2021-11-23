@@ -54,7 +54,8 @@ Enter_Domain_Names () {
     # Check if domain array contains duplicates
     uniqueNum=$(printf '%s\n' "${domain[@]}"|awk '!($0 in seen){seen[$0];c++} END {print c}')
     if (( uniqueNum != ${#domain[@]} )); then
-        echo "${RED}ERROR: Every domain needs a unique name! You had entered the same domain name minimum twice!${NC}"
+        echo "${RED}ERROR: Every domain needs a unique name! 
+You had entered the same domain name minimum twice!${NC}"
         exit 1
     fi
     # Save domain names in file (relevant for full restore on new machine)
@@ -73,7 +74,8 @@ Check_IPs () {
         if [ $wanIP = $dnsIP ]; then
             echo "${GREEN}SUCCESS: ${domain[$index]} points to this server ($wanIP)${NC}"
         else
-            echo "${RED}ERROR: The IP $dnsIP of ${domain[$index]} NOT points to this server ($wanIP)! Check your DNS records and remove proxies like Cloudflare in front of the server!${NC}"
+            echo "${RED}ERROR: The IP $dnsIP of ${domain[$index]} NOT points to this server ($wanIP)!
+Check your DNS records and remove proxies like Cloudflare in front of the server!${NC}"
             echo
             exit 1
         fi
@@ -97,7 +99,7 @@ Update_System_Packages () {
 
 Install_Prerequisite_Packages () {
     echo "${YELLOW}Install prerequisite packages...${NC}"
-    apt install apt-transport-https ca-certificates curl software-properties-common pwgen -y
+    apt install apt-transport-https ca-certificates curl software-properties-common pwgen cron nano openssl -y
     wget https://github.com/mikefarah/yq/releases/download/v4.13.4/yq_linux_amd64 -O /usr/bin/yq && chmod +x /usr/bin/yq
     echo "${GREEN}Done${NC}"
     echo
@@ -235,7 +237,9 @@ Check_If_Letsencrypt_Can_Access_Webserver () {
         url=http://"${domain[$index]}"/.well-known/acme-challenge/test.txt
         statusCode=$(curl --write-out '%{http_code}' --silent --output /dev/null $url)
         if [[ "$statusCode" -ne 200 ]]; then
-            echo "${RED}ERROR:    ${domain[$index]}    is NOT reachable! Check your firewall, port forwarding settings and DNS records. Make sure, that no proxy like Cloudflare is in front.${NC}"
+            echo "${RED}ERROR:    ${domain[$index]}    is NOT reachable! 
+Check your firewall, iptables, port forwarding settings and DNS records.
+Make sure, that no proxy like Cloudflare is in front.${NC}"
             exit 1
         else
             echo "${GREEN}SUCCESS:    ${domain[$index]}    is reachable${NC}"
