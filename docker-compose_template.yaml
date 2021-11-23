@@ -1,0 +1,114 @@
+version: "3.8"
+
+services:
+  synapse:
+    image: docker.io/matrixdotorg/synapse:${synapseTag}
+    container_name: "matrix_synapse"
+    restart: unless-stopped
+    environment:
+        SYNAPSE_SERVER_NAME: "MATRIX.DOMAIN.COM"
+        SYNAPSE_REPORT_STATS: "no"
+    depends_on:
+      postgresql:
+        condition: service_healthy
+    volumes:
+      - synapse-data:/data
+    network_mode: host
+
+  postgresql:
+    image: docker.io/postgres:${postgresqlTag}
+    container_name: "matrix_postgresql"
+    restart: unless-stopped
+    environment:
+      - POSTGRES_USER: synapse_db_user
+      - POSTGRES_PASSWORD: POSTGRES_PW
+      - POSTGRES_DB: synapse_db
+      - POSTGRES_INITDB_ARGS: "--encoding='UTF8' --lc-collate='C' --lc-ctype='C'"
+    # command:
+    #   - postgres
+    #   - -c
+    #   - max_connections=max_connections_value
+    #   - -c
+    #   - shared_buffers=shared_buffers_value
+    #   - -c
+    #   - effective_cache_size=effective_cache_size_value
+    #   - -c
+    #   - maintenance_work_mem=maintenance_work_mem_value
+    #   - -c
+    #   - checkpoint_completion_target=checkpoint_completion_target_value
+    #   - -c
+    #   - wal_buffers=wal_buffers_value
+    #   - -c
+    #   - default_statistics_target=default_statistics_target_value
+    #   - -c
+    #   - random_page_cost=random_page_cost_value
+    #   - -c
+    #   - effective_io_concurrency=effective_io_concurrency_value
+    #   - -c
+    #   - work_mem=work_mem_value
+    #   - -c
+    #   - min_wal_size=min_wal_size_value
+    #   - -c
+    #   - max_wal_size=max_wal_size_value
+    ##  - -c
+    ##  - max_worker_processes=max_worker_processes_value
+    ##  - -c
+    ##  - max_parallel_workers_per_gather=max_parallel_workers_per_gather_value
+    ##  - -c
+    ##  - max_parallel_workers=max_parallel_workers_value
+    ##  - -c
+    ##  - max_parallel_maintenance_workers=max_parallel_maintenance_workers_value
+    healthcheck:
+        test: ["CMD-SHELL", "pg_isready"]
+        interval: 1s
+        timeout: 3s
+        retries: 30
+    volumes:
+      - postgresql-data:/var/lib/postgresql/data
+    network_mode: host
+
+  registration:
+    image: docker.io/zeratax/matrix-registration:${registrationTag}
+    container_name: "matrix_registration"
+    restart: unless-stopped
+    command: serve
+    depends_on:
+      synapse:
+        condition: service_healthy
+    volumes:
+      - registration-data:/data
+    ports:
+      - 33333:5000
+
+  synapse_admin:
+    image: docker.io/awesometechnologies/synapse-admin:${synapseAdminTag}
+    container_name: "matrix_synapse-admin"
+    restart: unless-stopped
+    environment:
+        REACT_APP_SERVER: https://MATRIX.DOMAIN.COM
+    depends_on:
+      synapse:
+        condition: service_healthy
+    ports:
+      - 33334:80
+
+  element:
+    image: docker.io/vectorim/element-web:${elementTag}
+    container_name: "matrix_element"
+    restart: unless-stopped
+    depends_on:
+      synapse:
+        condition: service_healthy
+    volumes:
+      - element-data:/app
+    ports:
+      - 33335:80
+
+volumes:
+  synapse-data:
+  registration-data:
+  element-data:
+  postgresql-data:
+
+
+
