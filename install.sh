@@ -105,7 +105,7 @@ Install_Prerequisite_Packages () {
 
 Make_Scripts_Executable () {
     echo "${YELLOW}Make several scripts executable...${NC}"
-    chmod +x backup.sh delete.sh restore.sh update.sh
+    chmod +x backup.sh restore.sh update.sh
     echo "${GREEN}Done${NC}"
     echo
 }

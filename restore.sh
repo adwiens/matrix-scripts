@@ -136,7 +136,7 @@ fi
 
 Make_Scripts_Executable () {
     echo "${YELLOW}Make several scripts executable...${NC}"
-    chmod +x install.sh backup.sh delete.sh update.sh
+    chmod +x install.sh backup.sh update.sh
     echo "${GREEN}Done${NC}"
     echo
 }
