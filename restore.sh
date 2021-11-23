@@ -297,6 +297,16 @@ Check_Return_Code () {
     echo
 }
 
+RestoreSuccessful () {
+    echo
+    echo
+    echo "${GREEN}Restoring from:    ${YELLOW}$restore${GREEN}    was successful${NC}"
+    echo
+    echo
+    echo
+    echo
+}
+
 
 
 # ------------------------------------------------------------------------------------------------------------------
@@ -311,6 +321,7 @@ if [ $selectedNr = 1 ]; then
     Restore_Database
     Start_All_Containers
     rm $dbBackupName
+    RestoreSuccessful
 elif [ $selectedNr = 2 ]; then
     # Rollback to previous container releases and restore old database
     Restore_Env_File
@@ -320,12 +331,14 @@ elif [ $selectedNr = 2 ]; then
     Check_If_Backup_Compressed
     Restore_Database
     Start_All_Containers
+    RestoreSuccessful
 elif [ $selectedNr = 3 ]; then
     # Restore only old database
     Delete_PostgreSQL_Container_And_Volume
     Setup_PostgreSQL_Container_And_Volume
     Check_If_Backup_Compressed
     Restore_Database
+    RestoreSuccessful
 elif [ $selectedNr = 4 ]; then
     # You are on a new machine and want to restore everything
     Make_Scripts_Executable
@@ -354,5 +367,6 @@ elif [ $selectedNr = 4 ]; then
     echo "${YELLOW}Executing install.sh (finalize)...${NC}"
     /bin/bash install.sh "finalize"
     Check_Return_Code $? "Finalize installation"
+    RestoreSuccessful
 fi
 
