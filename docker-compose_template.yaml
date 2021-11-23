@@ -104,8 +104,13 @@ services:
     ports:
       - 33335:80
 
+
 volumes:
   synapse-data:
+    name: matrix_synapse-data
   registration-data:
+    name: matrix_registration-data
   element-data:
+    name: matrix_element-data
   postgresql-data:
+    name: matrix_postgresql-data
