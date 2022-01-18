@@ -63,7 +63,7 @@ You had entered the same domain name minimum twice!${NC}"
 }
 
 Check_IPs () {
-    echo "Check IPs of this server and domains..."
+    echo "${YELLOW}Check IPs of this server and domains...${NC}"
     wanIP=$(curl -s http://whatismyip.akamai.com/)
     if [ -z "$wanIP" ]; then
         # Fallback if akamai is not responding
@@ -309,7 +309,7 @@ Create_HTTPS_Configurations () {
     echo
     echo
     for index in ${!domain[*]}; do
-        echo "Create NGINX HTTPS configuration for:  ${domain[$index]}..."
+        echo "${YELLOW}Create NGINX HTTPS configuration for:  ${domain[$index]}...${NC}"
         nginxConfig="/etc/nginx/conf.d/${domain[$index]}.conf"
         cp -R ${nginxTemplate[$index]} "$nginxConfig"
         sed -i "s/DOMAIN.COM/${domain[$index]}/" $nginxConfig
