@@ -10,8 +10,8 @@
 #   - www & letsencrypt directories
 
 ################################################################################################################################
-# Version 0.0.5
-# Updated: 23.11.2021
+# Version 0.0.6
+# Updated: 08.03.2021
 ################################################################################################################################
 
 YELLOW=$(tput setaf 3)
@@ -255,6 +255,18 @@ Restore_Element_Files () {
     echo
 }
 
+Restart_All_Containers () {
+    echo "${YELLOW}Restarting Synapse + Element + Registration + Admin container...${NC}"
+    echo "${RED}This will take some time. Please wait...${NC}"
+    docker-compose restart
+    echo "${GREEN}Done${NC}"
+    echo
+    echo
+    docker ps
+    echo
+    echo
+}
+
 Start_All_Containers () {
     echo "${YELLOW}Starting Synapse + Element + Registration + Admin container...${NC}"
     echo "${RED}This will take some time. Please wait...${NC}"
@@ -339,6 +351,7 @@ elif [ $selectedNr = 3 ]; then
     Setup_PostgreSQL_Container_And_Volume
     Check_If_Backup_Compressed
     Restore_Database
+    Restart_All_Containers
     RestoreSuccessful
 elif [ $selectedNr = 4 ]; then
     # You are on a new machine and want to restore everything
