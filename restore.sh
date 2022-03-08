@@ -58,6 +58,7 @@ do
             break
             ;;
         "${options[4]}")
+            echo "${NC}"
             exit 1
             ;;
         *)
